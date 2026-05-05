@@ -11,6 +11,10 @@ public class Livro implements Publicacao {
         return "Livro{" + "titulo=" + titulo + "\n, autor=" + autor + "\n, totalPaginas=" + totalPaginas + "\n, paginaAtual=" + paginaAtual + "\n, aberto=" + aberto + "\n, leitor=" + leitor.getNome() + '}';
     }
 
+    public Livro(String titulo, String autor, int totalPaginas) {
+        this(titulo, autor, totalPaginas, 0, false, null);
+    }
+
     public Livro(String titulo, String autor, int totalPaginas, int paginaAtual, boolean aberto, Pessoa leitor) {
         this.titulo = titulo;
         this.autor = autor;
@@ -18,8 +22,8 @@ public class Livro implements Publicacao {
         this.paginaAtual = paginaAtual;
         this.aberto = false;
         this.leitor = leitor;
-              
-        
+
+
     }
 
     public String getTitulo() {
@@ -68,6 +72,10 @@ public class Livro implements Publicacao {
 
     public void setLeitor(Pessoa leitor) {
         this.leitor = leitor;
+    }
+
+    public int getPaginas() {
+        return totalPaginas;
     }
 
     @Override
