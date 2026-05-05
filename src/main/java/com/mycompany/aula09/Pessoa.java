@@ -9,7 +9,11 @@ public class Pessoa {
         this.idade=this.idade+1;
         
     }
-    //construtor
+    //construtores
+
+    public Pessoa(String nome, int idade) {
+        this(nome, idade, "");
+    }
 
     public Pessoa(String nome, int idade, String sexo) {
         this.nome = nome;
