@@ -87,9 +87,10 @@
 - **Content-Type:** application/json
 - **Região:** US2
 
-### Payload Enviado (5 campos)
+### Payload Enviado (6 campos)
 ```json
 {
+  "name": "string (obrigatório) - nome completo do usuário, ex: João Silva",
   "email": "string (obrigatório) - email do usuário, ex: joao@email.com",
   "phone": "string (obrigatório) - telefone com formatação, ex: (54) 98400-5467",
   "moment": "string (opcional) - estado da jornada do cliente",
@@ -110,6 +111,7 @@
 ### Exemplo Real de Payload
 ```json
 {
+  "name": "Maria Silva Santos",
   "email": "maria@gmail.com",
   "phone": "(54) 99999-8888",
   "moment": "decidindo",
@@ -134,6 +136,7 @@
 curl -X POST https://hook.us2.make.com/h6f9cvx8d3nv6ialrsbmavg3rahjqxlx \
   -H "Content-Type: application/json" \
   -d '{
+    "name": "João da Silva",
     "email": "teste@kpg.com.br",
     "phone": "(54) 98400-5467",
     "moment": "decidindo",
