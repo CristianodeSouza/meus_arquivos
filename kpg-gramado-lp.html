@@ -598,7 +598,7 @@
             <h2 class="section-title">Em Destaque</h2>
 
             <div class="property-card" style="margin: 0 16px 20px;">
-                <div class="property-image">
+                <div class="property-image" style="background: linear-gradient(rgba(26, 42, 58, 0.4), rgba(26, 42, 58, 0.4)), url('https://drive.google.com/uc?export=view&id=1SIQFF8iCSyq1j23YmMwnZj8dVyn_2_0A'); background-size: cover; background-position: center;">
                     <span>Empreendimento Flow - Unidade 505</span>
                     <div class="badge">Destaque Premium</div>
                 </div>
@@ -631,7 +631,7 @@
             </div>
 
             <div class="property-card" style="margin: 0 16px;">
-                <div class="property-image" style="background: linear-gradient(135deg, #5a9acc 0%, #2a6a8a 100%);">
+                <div class="property-image" style="background: linear-gradient(rgba(26, 42, 58, 0.4), rgba(26, 42, 58, 0.4)), url('https://drive.google.com/uc?export=view&id=1smrta8CstzpyIrWgpbaM3WFUlS0mdi_7'); background-size: cover; background-position: center;">
                     <span>Casa Cipó — Bairro Bavária</span>
                     <div class="badge">Lançamento 2028</div>
                 </div>
@@ -1015,21 +1015,25 @@
         // ============================================
         // GA4 INITIALIZATION
         // ============================================
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', GA_ID, { 'page_path': '/lp-gramado/' });
+        if (GA_ID && !GA_ID.includes('XXXXXX')) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID, { 'page_path': '/lp-gramado/' });
+        }
 
         // ============================================
         // META PIXEL INITIALIZATION
         // ============================================
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-        (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', META_PIXEL_ID);
-        fbq('track', 'PageView');
+        if (META_PIXEL_ID && !META_PIXEL_ID.includes('XXX')) {
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+            (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', META_PIXEL_ID);
+            fbq('track', 'PageView');
+        }
     </script>
 
     <!-- GTM SCRIPT (opcional, substituir GTM-ID) -->
