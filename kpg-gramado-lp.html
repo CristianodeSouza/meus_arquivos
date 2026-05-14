@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residências Premium em Gramado e Canela | KPG Imóveis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --kpg-navy: #1a2a3a;
+            --kpg-gold: #c9a961;
+            --kpg-light: #f5f3f0;
+            --kpg-text: #2a3a4a;
+            --kpg-text-light: #6a7a8a;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--kpg-light);
+            color: var(--kpg-text);
+            line-height: 1.6;
+        }
+
+        body {
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* HERO */
+        .hero {
+            background: var(--kpg-navy);
+            color: white;
+            padding: 48px 0;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--kpg-gold);
+            color: var(--kpg-navy);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 28px;
+            line-height: 1.7;
+            max-width: 95%;
+        }
+
+        .hero-solution {
+            background: rgba(201, 169, 97, 0.12);
+            border-left: 3px solid var(--kpg-gold);
+            padding: 20px;
+            border-radius: 4px;
+            margin: 28px 0;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .emphasis {
+            color: var(--kpg-gold);
+            font-weight: 600;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--kpg-gold);
+            color: var(--kpg-navy);
+        }
+
+        .btn-primary:active {
+            opacity: 0.85;
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--kpg-navy);
+        }
+
+        .btn-secondary:active {
+            opacity: 0.9;
+        }
+
+        /* SECTION */
+        .section {
+            padding: 40px 0;
+            background: white;
+            margin-bottom: 24px;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 28px;
+            color: var(--kpg-navy);
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--kpg-gold);
+            border-radius: 2px;
+        }
+
+        /* PROPERTY CARDS */
+        .property-card {
+            background: white;
+            border: 1px solid #e0dcd8;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:active {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--kpg-navy) 0%, #2a4a5a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--kpg-gold);
+            color: var(--kpg-navy);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .property-info {
+            padding: 16px;
+        }
+
+        .property-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--kpg-navy);
+        }
+
+        .property-location {
+            font-size: 12px;
+            color: var(--kpg-text-light);
+            margin-bottom: 12px;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--kpg-gold);
+            margin-bottom: 12px;
+        }
+
+        .property-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f0ebe7;
+            margin-bottom: 12px;
+        }
+
+        .spec {
+            text-align: center;
+        }
+
+        .spec-value {
+            font-weight: 700;
+            color: var(--kpg-navy);
+            font-size: 14px;
+        }
+
+        .spec-label {
+            color: var(--kpg-text-light);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .property-cta {
+            width: 100%;
+            padding: 10px;
+            background: var(--kpg-light);
+            color: var(--kpg-navy);
+            border: 1px solid #e0dcd8;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .property-cta:active {
+            background: #ebe6df;
+        }
+
+        /* FEATURES SECTION */
+        .features-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 0 16px;
+        }
+
+        .feature {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border-left: 4px solid var(--kpg-gold);
+            border-radius: 4px;
+            border: 1px solid #f0ebe7;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: var(--kpg-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--kpg-navy);
+            font-weight: 700;
+        }
+
+        .feature-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--kpg-navy);
+        }
+
+        .feature-content p {
+            font-size: 13px;
+            color: var(--kpg-text-light);
+            line-height: 1.6;
+        }
+
+        /* CAROUSEL */
+        .carousel {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+            margin: 0 -16px;
+            padding: 0 16px;
+            scroll-padding-left: 16px;
+        }
+
+        .carousel::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .carousel::-webkit-scrollbar-thumb {
+            background: var(--kpg-gold);
+        }
+
+        .carousel-item {
+            flex: 0 0 calc(100% - 16px);
+            scroll-snap-align: start;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 16px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--kpg-text-light);
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--kpg-navy);
+            font-weight: 600;
+        }
+
+        .modal > p {
+            font-size: 14px;
+            color: var(--kpg-text-light);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--kpg-navy);
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0dcd8;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+            color: var(--kpg-text);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--kpg-gold);
+            box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            color: #d9534f;
+            margin-top: 4px;
+            font-size: 12px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--kpg-gold);
+            color: var(--kpg-navy);
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 12px;
+        }
+
+        .btn-submit:active {
+            opacity: 0.85;
+        }
+
+        .form-disclaimer {
+            font-size: 11px;
+            color: var(--kpg-text-light);
+            margin-top: 16px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* FLOATING WHATSAPP */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.4);
+            z-index: 500;
+            transition: all 0.2s ease;
+        }
+
+        .whatsapp-fab:active {
+            transform: scale(0.95);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--kpg-navy);
+            color: white;
+            padding: 32px 16px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        footer h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        footer p {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        footer a {
+            color: var(--kpg-gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-team {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-member {
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .team-member-name {
+            font-weight: 600;
+            color: var(--kpg-gold);
+        }
+
+        .team-member-role {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 680px) {
+            .container {
+                padding: 0 32px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .cta-buttons {
+                flex-direction: row;
+                gap: 16px;
+            }
+
+            .btn {
+                flex: 1;
+            }
+
+            .section {
+                padding: 48px 32px;
+            }
+
+            .features-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 32px;
+            }
+
+            .property-specs {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .carousel-item {
+                flex: 0 0 calc(50% - 6px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="container">
+            <div class="hero-badge">Experiência Refinada</div>
+            <h1>Sua residência ideal em Gramado está aqui. Requintada. Localizada. Sua.</h1>
+
+            <p class="hero-subtitle">
+                Sabemos o que significa morar em Gramado. Sabemos o que você procura.
+                Então, em vez de listar tudo, curamos apenas as propriedades que realmente fazem diferença.
+            </p>
+
+            <div class="hero-solution">
+                Explore nosso <span class="emphasis">catálogo exclusivo</span> com dezenas de imóveis premium.
+                <span class="emphasis">Tire suas dúvidas com um especialista</span>
+            </div>
+
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="openModal()">📥 Baixar PDF com Catálogo Exclusivo</button>
+                <a href="https://wa.me/555498400546?text=Olá! Tenho interesse em residências premium em Gramado." class="btn btn-secondary" onclick="trackWhatsAppHero()">💬 Falar com Especialista</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROPERTIES IN FOCUS -->
+    <div class="container">
+        <div class="section" style="margin-top: 24px;">
+            <h2 class="section-title">Em Destaque</h2>
+
+            <div class="property-card" style="margin: 0 16px 20px;">
+                <div class="property-image">
+                    <span>Empreendimento Flow - Unidade 505</span>
+                    <div class="badge">Destaque Premium</div>
+                </div>
+                <div class="property-info">
+                    <div class="property-name">Flow — Unidade 505</div>
+                    <div class="property-location">📍 Gramado, RS • Urbinc Empreendimentos</div>
+                    <div class="property-price">
+                        <span style="text-decoration: line-through; color: #bbb; font-size: 14px;">De R$ 830.000</span>
+                        <span style="margin-left: 8px;">R$ 636.000</span>
+                    </div>
+                    <div class="property-specs">
+                        <div class="spec">
+                            <div class="spec-value">2</div>
+                            <div class="spec-label">Dorm.</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-value">1</div>
+                            <div class="spec-label">Suíte</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-value">78m²</div>
+                            <div class="spec-label">Área</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px; color: var(--kpg-text-light); margin: 12px 0; line-height: 1.6;">
+                        Andar elevado com posição nascente. Design refinado. Modernidade em cada detalhe.
+                    </p>
+                    <button class="property-cta" onclick="document.location='https://www.urbinc.com.br/imovel/flow-dutra-gramado/4'">Ver Detalhes Completos</button>
+                </div>
+            </div>
+
+            <div class="property-card" style="margin: 0 16px;">
+                <div class="property-image" style="background: linear-gradient(135deg, #5a9acc 0%, #2a6a8a 100%);">
+                    <span>Casa Cipó — Bairro Bavária</span>
+                    <div class="badge">Lançamento 2028</div>
+                </div>
+                <div class="property-info">
+                    <div class="property-name">Casa Cipó — V2378</div>
+                    <div class="property-location">📍 Nações Unidas 260, Bavária • Gramado</div>
+                    <div class="property-price">R$ 4.500.000</div>
+                    <div class="property-specs">
+                        <div class="spec">
+                            <div class="spec-value">3</div>
+                            <div class="spec-label">Suítes</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-value">2</div>
+                            <div class="spec-label">Vagas</div>
+                        </div>
+                        <div class="spec">
+                            <div class="spec-value">169m²</div>
+                            <div class="spec-label">Área</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px; color: var(--kpg-text-light); margin: 12px 0; line-height: 1.6;">
+                        Entre silêncio e verde, um refúgio contemporâneo. Pé-direito 2,70m. Automação residencial.
+                    </p>
+                    <button class="property-cta" onclick="document.location='https://www.kpgimoveis.com.br/imovel/casa-cipo-lancamento-bairro-bavaria-gramado/2378'">Ver Detalhes Completos</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="section">
+            <h2 class="section-title">Por Que Escolher KPG?</h2>
+
+            <div class="features-container">
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-content">
+                        <h3>Curadoria Cuidadosa</h3>
+                        <p>Cada residência foi selecionada por especialistas. Qualidade garantida em cada detalhe.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-content">
+                        <h3>Transparência Total</h3>
+                        <p>Informações completas, documentação clara, sem surpresas. Você sabe exatamente o que está adquirindo.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-content">
+                        <h3>Especialistas à Disposição</h3>
+                        <p>Nossa equipe compreende suas necessidades. Atendimento personalizado e consultoria profissional.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-content">
+                        <h3>Discrição e Eficiência</h3>
+                        <p>Respeito total ao seu tempo. Processo ágil, sem intermediários desnecessários.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA FINAL -->
+        <div class="section" style="text-align: center;">
+            <h2 class="section-title">Pronto para Descobrir?</h2>
+            <p style="font-size: 14px; color: var(--kpg-text-light); margin-bottom: 24px;">Escolha como deseja explorar nosso portfólio</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="openModal()" style="max-width: 100%;">📥 Baixar PDF com Catálogo Exclusivo</button>
+                <a href="https://wa.me/555498400546?text=Olá! Tenho interesse em residências premium em Gramado." class="btn btn-secondary" style="max-width: 100%;" onclick="trackWhatsAppFinal()">💬 Falar com Especialista</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULÁRIO -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2>Seu Catálogo Exclusivo</h2>
+            <p>Descubra residências cuidadosamente selecionadas. Preencha seus dados para acessar.</p>
+
+            <form id="downloadForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="seu.email@exemplo.com"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefone (com DDD) *</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="(54) 99999-9999"
+                        required
+                    />
+                    <small>Formato: (XX) 99999-9999</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="interest">Tipo de Interesse</label>
+                    <select id="interest" name="interest">
+                        <option value="">Selecione uma opção</option>
+                        <option value="residencia_propria">Residência Própria</option>
+                        <option value="segunda_residencia">Segunda Residência</option>
+                        <option value="investimento">Investimento Imobiliário</option>
+                        <option value="outro">Outro Interesse</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Acessar Portfólio Exclusivo</button>
+            </form>
+
+            <p class="form-disclaimer">
+                Seus dados estão protegidos. Você controla todo contato conosco.
+            </p>
+        </div>
+    </div>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/555498400546?text=Olá! Tenho interesse em residências premium em Gramado." class="whatsapp-fab" title="Fale conosco no WhatsApp" onclick="trackWhatsAppFloating(event)"></a>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>KPG Imóveis</h3>
+        <p style="color: var(--kpg-gold); font-weight: 600; font-size: 13px;">Especialistas em Gramado e Canela</p>
+
+        <div style="margin: 16px 0; font-size: 12px;">
+            <p>📍 Av. Borges de Medeiros, 3165 - Centro, Gramado - RS</p>
+            <p>📞 <a href="tel:+555498400546">(54) 98400-5467</a></p>
+            <p><a href="https://www.kpgimoveis.com.br" target="_blank">www.kpgimoveis.com.br</a></p>
+        </div>
+
+        <div class="footer-team">
+            <div class="team-member">
+                <div class="team-member-name">Paula Guedes</div>
+                <div class="team-member-role">CRECI 48846 • Corretora</div>
+                <a href="https://wa.me/555498400546">WhatsApp</a>
+            </div>
+            <div class="team-member">
+                <div class="team-member-name">Kelen Guedes</div>
+                <div class="team-member-role">CRECI 46018 • Corretora</div>
+                <a href="https://wa.me/555498400546">WhatsApp</a>
+            </div>
+            <div class="team-member">
+                <div class="team-member-name">Jairo Candiago</div>
+                <div class="team-member-role">CRECI 12.964 • Corretor</div>
+                <a href="https://wa.me/555498400546">WhatsApp</a>
+            </div>
+        </div>
+
+        <div style="margin-top: 16px; font-size: 11px; opacity: 0.8;">
+            © 2026 KPG Imóveis • CRECI-RS 25242J • Todos os direitos reservados
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // ============================================
+        // CONFIGURAÇÕES
+        // ============================================
+        const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/h6f9cvx8d3nv6ialrsbmavg3rahjqxlx';
+        const GA_ID = 'G-XXXXXX'; // Preencher com seu ID GA4
+        const META_PIXEL_ID = 'XXXXX'; // Preencher com seu Pixel ID
+
+        // ============================================
+        // RASTREAMENTO DE LEAD FRIA (Quem sai sem agir)
+        // ============================================
+        let visitanteSaiu = true;
+
+        window.addEventListener('beforeunload', function() {
+            if (visitanteSaiu) {
+                rastrearLeadFria();
+            }
+        });
+
+        function rastrearLeadFria() {
+            const beacon = navigator.sendBeacon;
+            if (beacon) {
+                const data = new FormData();
+                data.append('tipo', 'lead_fria');
+                data.append('timestamp', new Date().toISOString());
+
+                fetch(MAKE_WEBHOOK_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tipo: 'lead_fria',
+                        timestamp: new Date().toISOString(),
+                        source: 'LP Gramado',
+                        utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+                        utm_medium: new URLSearchParams(window.location.search).get('utm_medium')
+                    })
+                }).catch(e => console.log('Lead fria rastreado'));
+            }
+        }
+
+        // ============================================
+        // MODAL FUNCTIONS
+        // ============================================
+        function openModal() {
+            visitanteSaiu = false;
+            document.getElementById('downloadModal').classList.add('active');
+
+            // GA4: modal_open
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'modal_open', {
+                    'event_category': 'engagement',
+                    'event_label': 'pdf_download_form'
+                });
+            }
+
+            // Meta Pixel: Lead (soft)
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    'content_name': 'Modal PDF Aberto',
+                    'content_category': 'real_estate'
+                });
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').classList.remove('active');
+        }
+
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ============================================
+        // PHONE INPUT FORMATTING
+        // ============================================
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 2) {
+                    value = '(' + value;
+                } else if (value.length <= 6) {
+                    value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
+                } else {
+                    value = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7, 11);
+                }
+            }
+            e.target.value = value;
+        });
+
+        // ============================================
+        // FORM SUBMIT - LEAD MÉDIA
+        // ============================================
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            visitanteSaiu = false;
+
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const interest = document.getElementById('interest').value;
+
+            // GA4: form_submit
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    'event_category': 'engagement',
+                    'event_label': 'pdf_download_form',
+                    'email': email,
+                    'interest': interest
+                });
+            }
+
+            // Meta Pixel: Lead
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    'content_name': 'Portfólio KPG',
+                    'content_category': 'real_estate'
+                });
+            }
+
+            // Enviar para Make.com
+            fetch(MAKE_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    phone: phone,
+                    interest: interest,
+                    tipo_lead: 'lead_media',
+                    source: 'LP Gramado',
+                    timestamp: new Date().toISOString(),
+                    utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+                    utm_medium: new URLSearchParams(window.location.search).get('utm_medium')
+                })
+            }).then(response => {
+                if (response.ok) {
+                    // GA4: file_download
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'file_download', {
+                            'event_category': 'engagement',
+                            'event_label': 'portifolio_enviado'
+                        });
+                    }
+
+                    alert('✓ Portfólio enviado para seu email!\n\nVerifique sua caixa de entrada.');
+                    closeModal();
+                    document.getElementById('downloadForm').reset();
+                } else {
+                    alert('Houve um erro. Tente novamente ou entre em contato via WhatsApp.');
+                }
+            }).catch(error => {
+                console.error('Erro ao enviar:', error);
+                alert('Erro ao enviar. Você pode clicar no WhatsApp abaixo para contato direto.');
+            });
+        }
+
+        // ============================================
+        // WHATSAPP TRACKING - LEAD QUENTE
+        // ============================================
+        function trackWhatsAppHero(e) {
+            visitanteSaiu = false;
+            rastrearWhatsApp();
+            if (e) e.preventDefault();
+        }
+
+        function trackWhatsAppFinal(e) {
+            visitanteSaiu = false;
+            rastrearWhatsApp();
+            if (e) e.preventDefault();
+        }
+
+        function trackWhatsAppFloating(e) {
+            visitanteSaiu = false;
+            rastrearWhatsApp();
+            // Deixar o link funcionar normalmente
+        }
+
+        function rastrearWhatsApp() {
+            // GA4: button_click
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'button_click', {
+                    'event_category': 'engagement',
+                    'event_label': 'whatsapp_contact'
+                });
+            }
+
+            // Meta Pixel: Contact
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Contact');
+            }
+
+            // Enviar para Make.com (Lead Quente)
+            fetch(MAKE_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tipo_lead: 'lead_quente',
+                    source: 'LP Gramado',
+                    timestamp: new Date().toISOString(),
+                    utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+                    utm_medium: new URLSearchParams(window.location.search).get('utm_medium')
+                })
+            }).catch(e => console.log('Lead quente rastreado'));
+        }
+
+        // ============================================
+        // PAGE VIEW - LEAD FRIA (potencial)
+        // ============================================
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view');
+        }
+
+        // ============================================
+        // GA4 INITIALIZATION
+        // ============================================
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', GA_ID, { 'page_path': '/lp-gramado/' });
+
+        // ============================================
+        // META PIXEL INITIALIZATION
+        // ============================================
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+        (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', META_PIXEL_ID);
+        fbq('track', 'PageView');
+    </script>
+
+    <!-- GTM SCRIPT (opcional, substituir GTM-ID) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
+    -->
+
+</body>
+</html>
