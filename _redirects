@@ -1,0 +1,9 @@
+# Redirecionar raiz para index.html
+/ /index.html 200
+
+# Redirecionar para landing page
+/gramado /kpg-gramado-lp.html 200
+
+# Cache rules
+/*.html 200
+/index.html 200
