@@ -1034,9 +1034,9 @@
             gtag('config', GA_ID);
         }
 
-        // Meta Pixel
-        const META_PIXEL_ID = 'XXXXXXXXXX'; // Replace with actual ID
-        if (META_PIXEL_ID && !META_PIXEL_ID.includes('XXXXXXXXXX')) {
+        // Meta Pixel - Multiple IDs
+        const META_PIXEL_IDS = ['327474742221290', '545732363086873'];
+        if (META_PIXEL_IDS && META_PIXEL_IDS.length > 0) {
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -1045,7 +1045,9 @@
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', META_PIXEL_ID);
+            META_PIXEL_IDS.forEach(id => {
+                fbq('init', id);
+            });
             fbq('track', 'PageView');
         }
 
