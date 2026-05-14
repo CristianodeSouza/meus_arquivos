@@ -3,6 +3,9 @@ PRODUCAO_KPG_GRAMADO.md
 CHECKLIST_PRODUCAO.md
 GUIA_RAPIDO.md
 
+# Protótipos locais (não fazer commit até validar)
+kpg-gramado-lp-premium.html
+
 # Ambiente
 .env
 .env.local
