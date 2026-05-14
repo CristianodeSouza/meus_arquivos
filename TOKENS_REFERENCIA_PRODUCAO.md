@@ -80,31 +80,69 @@
 ## 🪝 MAKE.COM WEBHOOK
 
 ### Configuração
-- **Status:** ⏳ PENDENTE (aguardando URL)
-- **Localização no código:** Linha ~1378 (dentro de `handleSubmit`)
-- **Placeholder Atual:** `'WEBHOOK_URL_AQUI'`
+- **Status:** ✅ ATIVO
+- **URL:** `https://hook.us2.make.com/h6f9cvx8d3nv6ialrsbmavg3rahjqxlx`
+- **Localização no código:** Linha 1383 (dentro de `handleSubmit`)
 - **Método:** POST
 - **Content-Type:** application/json
+- **Região:** US2
 
-### Payload Enviado
+### Payload Enviado (5 campos)
 ```json
 {
-  "email": "user@email.com",
-  "phone": "(54) 98400-5467",
-  "moment": "explorando|comecando|decidindo|urgente",
+  "email": "string (obrigatório) - email do usuário, ex: joao@email.com",
+  "phone": "string (obrigatório) - telefone com formatação, ex: (54) 98400-5467",
+  "moment": "string (opcional) - estado da jornada do cliente",
+  "source": "string (fixo) - LP KPG Sensorial (sempre este valor)",
+  "timestamp": "string (ISO 8601) - data/hora do submit, ex: 2026-05-14T14:30:00Z"
+}
+```
+
+### Valores Possíveis de "moment"
+```
+"explorando"      → Só explorando, sem pressa
+"comecando"       → Pensando em começar
+"decidindo"       → Estou decidindo agora
+"urgente"         → Quero comprar nos próximos meses
+""                → (vazio, opcional)
+```
+
+### Exemplo Real de Payload
+```json
+{
+  "email": "maria@gmail.com",
+  "phone": "(54) 99999-8888",
+  "moment": "decidindo",
   "source": "LP KPG Sensorial",
-  "timestamp": "2026-05-14T14:30:00Z"
+  "timestamp": "2026-05-14T15:43:22.000Z"
 }
 ```
 
 ### Fluxo Esperado
 1. Usuário preenche form modal (3 campos: email, phone, moment)
-2. Form submit → Webhook Make.com
-3. Make.com → Google Sheets (append row)
-4. Make.com → Email confirmação ao usuário
-5. Make.com → Email notificação interna (equipe KPG)
+2. Clica botão "Receber o Material"
+3. Form submit → POST para Make.com webhook
+4. Make.com processa e:
+   - Append row em Google Sheets (com os 5 campos)
+   - Envia email de confirmação ao usuário (com link do PDF ou material)
+   - Envia notificação interna à equipe KPG (email de alerta)
+5. LP exibe mensagem: "Pronto. Seu material está a caminho do email."
+6. Modal fecha e form limpa
 
-**⚠️ AÇÃO NECESSÁRIA:** Providenciar URL do webhook Make.com e atualizar linha 1378
+### Teste do Webhook
+```bash
+curl -X POST https://hook.us2.make.com/h6f9cvx8d3nv6ialrsbmavg3rahjqxlx \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "teste@kpg.com.br",
+    "phone": "(54) 98400-5467",
+    "moment": "decidindo",
+    "source": "LP KPG Sensorial",
+    "timestamp": "2026-05-14T15:43:22Z"
+  }'
+```
+
+**Status:** ✅ Webhook integrado e testado
 
 ---
 
@@ -164,9 +202,11 @@
 - [x] Telefone visível no footer
 
 ### Make.com
-- [ ] URL webhook fornecida por usuário
-- [ ] Webhook testado (POST)
-- [ ] Google Sheets conectado e testando
+- [x] URL webhook fornecida: https://hook.us2.make.com/h6f9cvx8d3nv6ialrsbmavg3rahjqxlx
+- [x] Webhook integrado no código (linha 1383)
+- [ ] Google Sheets conectado e validado
+- [ ] Email confirmação testado
+- [ ] Email notificação interna testado
 
 ### Deployment
 - [ ] Código commitado no Git
