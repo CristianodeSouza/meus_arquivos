@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crediclass Dashboard - Ranking de Consórcios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">
+                📊 Crediclass Dashboard
+            </h1>
+            <p class="text-gray-600 mt-2">Inteligência operacional de consórcios</p>
+        </div>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <button class="tab-btn active px-4 py-4 border-b-2 border-blue-600 text-blue-600 font-semibold" data-tab="ranking">
+                    🏆 Ranking de ADM
+                </button>
+                <button class="tab-btn px-4 py-4 border-b-2 border-transparent text-gray-600 font-semibold hover:text-gray-900" data-tab="mapa-grupos">
+                    🗺️ Mapa de Grupos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- TAB 1: Ranking de ADM -->
+        <div id="tab-ranking" class="tab-content">
+            <!-- Controles -->
+            <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">🔍 Filtros</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        ADM (Administradora)
+                    </label>
+                    <select
+                        id="filtroAdm"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">Todas as ADMs</option>
+                        <option value="ITAÚ">ITAÚ</option>
+                        <option value="CAIXA">CAIXA</option>
+                        <option value="PORTO">PORTO</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Tipo de Bem
+                    </label>
+                    <select
+                        id="filtroTipo"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">Todos os tipos</option>
+                        <option value="Imóvel">Imóvel</option>
+                        <option value="Automóvel">Automóvel</option>
+                    </select>
+                </div>
+
+                <div class="flex items-end">
+                    <button
+                        id="btnCarregar"
+                        onclick="carregarRanking()"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                    >
+                        ⚡ Carregar Ranking
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas Resumidas -->
+        <div id="resumoStats" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8" style="display: none;">
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Total de Grupos</p>
+                <p class="text-2xl font-bold text-gray-900" id="statTotal">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Score Médio</p>
+                <p class="text-2xl font-bold text-blue-600" id="statMedia">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Score Máximo</p>
+                <p class="text-2xl font-bold text-green-600" id="statMaximo">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Score Mínimo</p>
+                <p class="text-2xl font-bold text-red-600" id="statMinimo">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Top 3 Grupos</p>
+                <p class="text-2xl font-bold text-purple-600" id="statTop3">0</p>
+            </div>
+        </div>
+
+        <!-- Top 10 Grupos -->
+        <div class="bg-white rounded-lg shadow mb-8" style="display: none;" id="containerTop10">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold">🏆 Top 10 Grupos Recomendados</h2>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-100 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">#</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Grupo</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">ADM</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Taxa ADM</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Prazo</th>
+                            <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Score</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaTop10">
+                        <!-- Preenchido por JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <p class="text-gray-500">👈 Selecione filtros e clique em "Carregar Ranking"</p>
+        </div>
+        </div>
+
+        <!-- TAB 2: Mapa de Grupos -->
+        <div id="tab-mapa-grupos" class="tab-content" style="display: none;">
+            <!-- Cards Operacionais -->
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Grupos Únicos</p>
+                    <p class="text-2xl font-bold text-gray-900" id="cardGruposUnicos">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Administradoras</p>
+                    <p class="text-2xl font-bold text-blue-600" id="cardAdms">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Atualizados</p>
+                    <p class="text-2xl font-bold text-green-600" id="cardAtualizados">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Pendentes</p>
+                    <p class="text-2xl font-bold text-yellow-600" id="cardPendentes">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Desatualizados</p>
+                    <p class="text-2xl font-bold text-orange-600" id="cardDesatualizados">0</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Incompletos</p>
+                    <p class="text-2xl font-bold text-red-600" id="cardIncompletos">0</p>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">🔍 Filtros Operacionais</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Administradora</label>
+                        <select id="filtroMapaAdm" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="filtroMapaStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todos</option>
+                            <option value="Atualizado">Atualizado</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Desatualizado">Desatualizado</option>
+                            <option value="Incompleto">Incompleto</option>
+                            <option value="Sem histórico">Sem histórico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+                        <select id="filtroMapaTipo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todos</option>
+                            <option value="Imóvel">Imóvel</option>
+                            <option value="Automóvel">Automóvel</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="carregarMapaGrupos()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                            🔄 Carregar Mapa
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela Principal -->
+            <div class="bg-white rounded-lg shadow mb-8" id="containerMapaGrupos" style="display: none;">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold">📋 Grupos Cadastrados</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Administradora</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Grupo</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Tipo</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Crédito Máx</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Prazo (meses)</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Média Lance</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Contemplações</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Última Atualização</th>
+                                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Status</th>
+                                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaMapaGrupos">
+                            <!-- Preenchido por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Loading State Mapa -->
+            <div id="loadingMapaState" class="text-center py-12">
+                <p class="text-gray-500">👈 Clique em "Carregar Mapa" para visualizar os grupos</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-600">
+            <p>Crediclass Dashboard v1.0 | Ranking de Consórcios</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

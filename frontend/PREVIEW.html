@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crediclass Dashboard - Ranking de Consórcios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Crediclass Dashboard Styles */
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --success-green: #10b981;
+            --warning-orange: #f97316;
+            --danger-red: #ef4444;
+            --light-gray: #f3f4f6;
+            --border-gray: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Table Styles */
+        table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid var(--border-gray);
+            transition: background-color 0.2s ease;
+        }
+
+        table tbody tr td {
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Score Badge */
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .score-badge.excellent {
+            background-color: var(--success-green);
+        }
+
+        .score-badge.good {
+            background-color: #3b82f6;
+        }
+
+        .score-badge.fair {
+            background-color: var(--warning-orange);
+        }
+
+        .score-badge.poor {
+            background-color: var(--danger-red);
+        }
+
+        /* Top 3 Badge */
+        .top-3-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #fbbf24;
+            color: #78350f;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ADM Badge */
+        .adm-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .adm-badge.itau {
+            background-color: #dc2626;
+        }
+
+        .adm-badge.caixa {
+            background-color: #0369a1;
+        }
+
+        .adm-badge.porto {
+            background-color: #059669;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid var(--border-gray);
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fade Animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hover Effects */
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        .clickable-row:hover {
+            background-color: #f0f9ff !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.75rem;
+            }
+
+            table tbody tr td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .score-badge {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-badge.atualizado {
+            background-color: var(--success-green);
+        }
+
+        .status-badge.pendente {
+            background-color: #fbbf24;
+            color: #78350f;
+        }
+
+        .status-badge.desatualizado {
+            background-color: var(--warning-orange);
+        }
+
+        .status-badge.incompleto {
+            background-color: #8b5cf6;
+        }
+
+        .status-badge.sem-historico {
+            background-color: #9ca3af;
+        }
+
+        /* Tabs */
+        .tab-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .tab-content {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Action Button */
+        .action-btn {
+            padding: 0.375rem 0.75rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Print Styles */
+        @media print {
+            header,
+            footer,
+            #filtros {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900">
+                📊 Crediclass Dashboard
+            </h1>
+            <p class="text-gray-600 mt-2">Inteligência operacional de consórcios</p>
+        </div>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <button class="tab-btn active px-4 py-4 border-b-2 border-blue-600 text-blue-600 font-semibold" data-tab="ranking">
+                    🏆 Ranking de ADM
+                </button>
+                <button class="tab-btn px-4 py-4 border-b-2 border-transparent text-gray-600 font-semibold hover:text-gray-900" data-tab="mapa-grupos">
+                    🗺️ Mapa de Grupos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- TAB 1: Ranking de ADM -->
+        <div id="tab-ranking" class="tab-content">
+            <!-- Controles -->
+            <div class="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">🔍 Filtros</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ADM (Administradora)</label>
+                        <select id="filtroAdm" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todas as ADMs</option>
+                            <option value="ITAÚ">ITAÚ</option>
+                            <option value="CAIXA">CAIXA</option>
+                            <option value="PORTO">PORTO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Bem</label>
+                        <select id="filtroTipo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todos os tipos</option>
+                            <option value="Imóvel">Imóvel</option>
+                            <option value="Automóvel">Automóvel</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="alert('Funcionalidade de ranking não implementada neste preview')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                            ⚡ Carregar Ranking
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center py-12">
+                <p class="text-gray-500">👈 Selecione filtros e clique em "Carregar Ranking"</p>
+            </div>
+        </div>
+
+        <!-- TAB 2: Mapa de Grupos -->
+        <div id="tab-mapa-grupos" class="tab-content" style="display: none;">
+            <!-- Cards Operacionais -->
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Grupos Únicos</p>
+                    <p class="text-2xl font-bold text-gray-900" id="cardGruposUnicos">6</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Administradoras</p>
+                    <p class="text-2xl font-bold text-blue-600" id="cardAdms">3</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Atualizados</p>
+                    <p class="text-2xl font-bold text-green-600" id="cardAtualizados">3</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Pendentes</p>
+                    <p class="text-2xl font-bold text-yellow-600" id="cardPendentes">1</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Desatualizados</p>
+                    <p class="text-2xl font-bold text-orange-600" id="cardDesatualizados">2</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4">
+                    <p class="text-gray-600 text-sm">Incompletos</p>
+                    <p class="text-2xl font-bold text-red-600" id="cardIncompletos">0</p>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">🔍 Filtros Operacionais</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Administradora</label>
+                        <select id="filtroMapaAdm" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todas</option>
+                            <option value="CAIXA">CAIXA</option>
+                            <option value="ITAÚ">ITAÚ</option>
+                            <option value="PORTO">PORTO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="filtroMapaStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todos</option>
+                            <option value="Atualizado">Atualizado</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Desatualizado">Desatualizado</option>
+                            <option value="Incompleto">Incompleto</option>
+                            <option value="Sem histórico">Sem histórico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+                        <select id="filtroMapaTipo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Todos</option>
+                            <option value="Imóvel">Imóvel</option>
+                            <option value="Automóvel">Automóvel</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="carregarMapaGrupos()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                            🔄 Carregar Mapa
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela Principal -->
+            <div class="bg-white rounded-lg shadow mb-8" id="containerMapaGrupos" style="display: none;">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold">📋 Grupos Cadastrados</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Administradora</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Grupo</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Tipo</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Crédito Máx</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Prazo (meses)</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Média Lance</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Contemplações</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Última Atualização</th>
+                                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Status</th>
+                                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaMapaGrupos">
+                            <!-- Preenchido por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Loading State Mapa -->
+            <div id="loadingMapaState" class="text-center py-12">
+                <p class="text-gray-500">👈 Clique em "Carregar Mapa" para visualizar os grupos</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-600">
+            <p>Crediclass Dashboard v1.0 | Ranking de Consórcios</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados fictícios para o Mapa de Grupos
+        const mapaGruposData = [
+            { adm: 'CAIXA', grupo: 1042, tipo: 'Imóvel', creditoMax: 250000, prazo: 180, mediaLance: 15000, contemplacoes: 45, ultimaAtualizacao: '2026-05-15', status: 'Atualizado' },
+            { adm: 'ITAÚ', grupo: 2105, tipo: 'Automóvel', creditoMax: 80000, prazo: 120, mediaLance: 8000, contemplacoes: 32, ultimaAtualizacao: '2026-04-20', status: 'Pendente' },
+            { adm: 'PORTO', grupo: 1523, tipo: 'Imóvel', creditoMax: 200000, prazo: 90, mediaLance: 12000, contemplacoes: 38, ultimaAtualizacao: '2026-03-10', status: 'Desatualizado' },
+            { adm: 'CAIXA', grupo: 1580, tipo: 'Automóvel', creditoMax: 75000, prazo: 150, mediaLance: 7500, contemplacoes: 28, ultimaAtualizacao: '2026-05-12', status: 'Atualizado' },
+            { adm: 'ITAÚ', grupo: 2234, tipo: 'Imóvel', creditoMax: 300000, prazo: 200, mediaLance: 18000, contemplacoes: 52, ultimaAtualizacao: '2026-02-05', status: 'Desatualizado' },
+            { adm: 'PORTO', grupo: 1890, tipo: 'Automóvel', creditoMax: 85000, prazo: 110, mediaLance: 8500, contemplacoes: 35, ultimaAtualizacao: '2026-05-14', status: 'Atualizado' }
+        ];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            setupTabButtons();
+        });
+
+        // Configura os botões de abas
+        function setupTabButtons() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.style.display = 'none';
+                    });
+                    btn.classList.add('active');
+                    const tabId = btn.dataset.tab;
+                    document.getElementById(`tab-${tabId}`).style.display = 'block';
+                });
+            });
+        }
+
+        // Obtém badge de ADM com cor apropriada
+        function obterADMBadge(adm) {
+            let classe = '';
+            const admUpper = adm.toUpperCase();
+
+            if (admUpper === 'ITAÚ' || admUpper === 'ITAU') classe = 'itau';
+            else if (admUpper === 'CAIXA') classe = 'caixa';
+            else if (admUpper === 'PORTO') classe = 'porto';
+
+            return `<span class="adm-badge ${classe}">${adm}</span>`;
+        }
+
+        // Carrega e exibe o Mapa de Grupos
+        function carregarMapaGrupos() {
+            const adm = document.getElementById('filtroMapaAdm').value;
+            const status = document.getElementById('filtroMapaStatus').value;
+            const tipo = document.getElementById('filtroMapaTipo').value;
+
+            let dadosFiltrados = mapaGruposData;
+
+            if (adm) dadosFiltrados = dadosFiltrados.filter(g => g.adm === adm);
+            if (status) dadosFiltrados = dadosFiltrados.filter(g => g.status === status);
+            if (tipo) dadosFiltrados = dadosFiltrados.filter(g => g.tipo === tipo);
+
+            atualizarTabelaMapa(dadosFiltrados);
+
+            document.getElementById('containerMapaGrupos').style.display = 'block';
+            document.getElementById('loadingMapaState').style.display = 'none';
+        }
+
+        // Atualiza a tabela do Mapa de Grupos
+        function atualizarTabelaMapa(grupos) {
+            const tbody = document.getElementById('tabelaMapaGrupos');
+            tbody.innerHTML = '';
+
+            if (grupos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center text-gray-500 py-4">Nenhum grupo encontrado</td></tr>';
+                return;
+            }
+
+            grupos.forEach((grupo, index) => {
+                const row = document.createElement('tr');
+                const statusBadge = `<span class="status-badge ${grupo.status.toLowerCase().replace(' ', '-')}">${grupo.status}</span>`;
+                const admBadge = obterADMBadge(grupo.adm);
+
+                row.className = 'fade-in';
+                row.style.animationDelay = `${index * 0.05}s`;
+                row.innerHTML = `
+                    <td>${admBadge}</td>
+                    <td><strong>${grupo.grupo}</strong></td>
+                    <td>${grupo.tipo}</td>
+                    <td>R$ ${(grupo.creditoMax / 1000).toFixed(0)}k</td>
+                    <td>${grupo.prazo} meses</td>
+                    <td>R$ ${(grupo.mediaLance / 1000).toFixed(1)}k</td>
+                    <td>${grupo.contemplacoes}</td>
+                    <td>${grupo.ultimaAtualizacao}</td>
+                    <td class="text-center">${statusBadge}</td>
+                    <td class="text-center">
+                        <button class="action-btn" onclick="editarGrupo(${grupo.grupo})">Editar</button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Abre modal para editar grupo
+        function editarGrupo(grupoId) {
+            const grupo = mapaGruposData.find(g => g.grupo === grupoId);
+            if (!grupo) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+                    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-2xl font-bold">✏️ Editar Grupo ${grupo.grupo}</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Maior Lance (R$)</label>
+                            <input type="number" value="${grupo.mediaLance * 1.2}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Maior lance">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Menor Lance (R$)</label>
+                            <input type="number" value="${grupo.mediaLance * 0.8}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Menor lance">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Contemplações</label>
+                            <input type="number" value="${grupo.contemplacoes}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Contemplações">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Mês Atualização</label>
+                            <input type="date" value="${grupo.ultimaAtualizacao}" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-200 flex gap-2">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                        <button onclick="salvarGrupo(${grupo.grupo}); this.closest('.fixed').remove();" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        // Salva alterações do grupo
+        function salvarGrupo(grupoId) {
+            console.log(`Grupo ${grupoId} salvo!`);
+            alert(`Grupo ${grupoId} atualizado com sucesso!`);
+        }
+    </script>
+</body>
+</html>
