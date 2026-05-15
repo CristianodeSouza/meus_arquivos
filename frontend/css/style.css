@@ -163,6 +163,73 @@ button:active {
     }
 }
 
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status-badge.atualizado {
+    background-color: var(--success-green);
+}
+
+.status-badge.pendente {
+    background-color: #fbbf24;
+    color: #78350f;
+}
+
+.status-badge.desatualizado {
+    background-color: var(--warning-orange);
+}
+
+.status-badge.incompleto {
+    background-color: #8b5cf6;
+}
+
+.status-badge.sem-historico {
+    background-color: #9ca3af;
+}
+
+/* Tabs */
+.tab-btn {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.tab-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.tab-btn.active {
+    border-bottom-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Action Button */
+.action-btn {
+    padding: 0.375rem 0.75rem;
+    background-color: var(--primary-blue);
+    color: white;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-dark);
+}
+
 /* Print Styles */
 @media print {
     header,

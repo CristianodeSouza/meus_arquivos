@@ -21,10 +21,22 @@ const appState = {
     loading: false
 };
 
+// Dados fictícios para o Mapa de Grupos (será substituído por API)
+const mapaGruposData = [
+    { adm: 'CAIXA', grupo: 1042, tipo: 'Imóvel', creditoMax: 250000, prazo: 180, mediaLance: 15000, contemplacoes: 45, ultimaAtualizacao: '2026-05-15', status: 'Atualizado' },
+    { adm: 'ITAÚ', grupo: 2105, tipo: 'Automóvel', creditoMax: 80000, prazo: 120, mediaLance: 8000, contemplacoes: 32, ultimaAtualizacao: '2026-04-20', status: 'Pendente' },
+    { adm: 'PORTO', grupo: 1523, tipo: 'Imóvel', creditoMax: 200000, prazo: 90, mediaLance: 12000, contemplacoes: 38, ultimaAtualizacao: '2026-03-10', status: 'Desatualizado' },
+    { adm: 'CAIXA', grupo: 1580, tipo: 'Automóvel', creditoMax: 75000, prazo: 150, mediaLance: 7500, contemplacoes: 28, ultimaAtualizacao: '2026-05-12', status: 'Atualizado' },
+    { adm: 'ITAÚ', grupo: 2234, tipo: 'Imóvel', creditoMax: 300000, prazo: 200, mediaLance: 18000, contemplacoes: 52, ultimaAtualizacao: '2026-02-05', status: 'Desatualizado' },
+    { adm: 'PORTO', grupo: 1890, tipo: 'Automóvel', creditoMax: 85000, prazo: 110, mediaLance: 8500, contemplacoes: 35, ultimaAtualizacao: '2026-05-14', status: 'Atualizado' }
+];
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Crediclass Dashboard iniciado');
     carregarADMsDisponiveis();
+    setupTabButtons();
+    setupMapaGruposData();
 });
 
 /**
@@ -341,3 +353,166 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+/**
+ * Configura os botões de abas
+ */
+function setupTabButtons() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            btn.classList.add('active');
+            const tabId = btn.dataset.tab;
+            document.getElementById(`tab-${tabId}`).style.display = 'block';
+        });
+    });
+}
+
+/**
+ * Configura dados iniciais do Mapa de Grupos
+ */
+function setupMapaGruposData() {
+    const selectAdms = document.getElementById('filtroMapaAdm');
+    const admsUnicos = [...new Set(mapaGruposData.map(g => g.adm))];
+
+    admsUnicos.forEach(adm => {
+        const option = document.createElement('option');
+        option.value = adm;
+        option.textContent = adm;
+        selectAdms.appendChild(option);
+    });
+
+    atualizarCardsMapaGrupos();
+}
+
+/**
+ * Atualiza os cards operacionais do Mapa
+ */
+function atualizarCardsMapaGrupos() {
+    const data = mapaGruposData;
+
+    document.getElementById('cardGruposUnicos').textContent = new Set(data.map(g => g.grupo)).size;
+    document.getElementById('cardAdms').textContent = new Set(data.map(g => g.adm)).size;
+    document.getElementById('cardAtualizados').textContent = data.filter(g => g.status === 'Atualizado').length;
+    document.getElementById('cardPendentes').textContent = data.filter(g => g.status === 'Pendente').length;
+    document.getElementById('cardDesatualizados').textContent = data.filter(g => g.status === 'Desatualizado').length;
+    document.getElementById('cardIncompletos').textContent = data.filter(g => g.status === 'Incompleto').length;
+}
+
+/**
+ * Carrega e exibe o Mapa de Grupos
+ */
+function carregarMapaGrupos() {
+    const adm = document.getElementById('filtroMapaAdm').value;
+    const status = document.getElementById('filtroMapaStatus').value;
+    const tipo = document.getElementById('filtroMapaTipo').value;
+
+    let dadosFiltrados = mapaGruposData;
+
+    if (adm) dadosFiltrados = dadosFiltrados.filter(g => g.adm === adm);
+    if (status) dadosFiltrados = dadosFiltrados.filter(g => g.status === status);
+    if (tipo) dadosFiltrados = dadosFiltrados.filter(g => g.tipo === tipo);
+
+    atualizarTabelaMapa(dadosFiltrados);
+
+    document.getElementById('containerMapaGrupos').style.display = 'block';
+    document.getElementById('loadingMapaState').style.display = 'none';
+}
+
+/**
+ * Atualiza a tabela do Mapa de Grupos
+ */
+function atualizarTabelaMapa(grupos) {
+    const tbody = document.getElementById('tabelaMapaGrupos');
+    tbody.innerHTML = '';
+
+    if (grupos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-gray-500 py-4">Nenhum grupo encontrado</td></tr>';
+        return;
+    }
+
+    grupos.forEach((grupo, index) => {
+        const row = document.createElement('tr');
+        const statusBadge = `<span class="status-badge ${grupo.status.toLowerCase().replace(' ', '-')}">${grupo.status}</span>`;
+        const admBadge = obterADMBadge(grupo.adm);
+
+        row.className = 'fade-in';
+        row.style.animationDelay = `${index * 0.05}s`;
+        row.innerHTML = `
+            <td>${admBadge}</td>
+            <td><strong>${grupo.grupo}</strong></td>
+            <td>${grupo.tipo}</td>
+            <td>R$ ${(grupo.creditoMax / 1000).toFixed(0)}k</td>
+            <td>${grupo.prazo} meses</td>
+            <td>R$ ${(grupo.mediaLance / 1000).toFixed(1)}k</td>
+            <td>${grupo.contemplacoes}</td>
+            <td>${grupo.ultimaAtualizacao}</td>
+            <td class="text-center">${statusBadge}</td>
+            <td class="text-center">
+                <button class="action-btn" onclick="editarGrupo(${grupo.grupo})">Editar</button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    });
+}
+
+/**
+ * Abre modal para editar grupo
+ */
+function editarGrupo(grupoId) {
+    const grupo = mapaGruposData.find(g => g.grupo === grupoId);
+    if (!grupo) return;
+
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-2xl font-bold">✏️ Editar Grupo ${grupo.grupo}</h2>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Maior Lance (R$)</label>
+                    <input type="number" value="${grupo.mediaLance * 1.2}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Maior lance">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Menor Lance (R$)</label>
+                    <input type="number" value="${grupo.mediaLance * 0.8}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Menor lance">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contemplações</label>
+                    <input type="number" value="${grupo.contemplacoes}" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Contemplações">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mês Atualização</label>
+                    <input type="date" value="${grupo.ultimaAtualizacao}" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-gray-200 flex gap-2">
+                <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Cancelar</button>
+                <button onclick="salvarGrupo(${grupo.grupo}); this.closest('.fixed').remove();" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+}
+
+/**
+ * Salva alterações do grupo
+ */
+function salvarGrupo(grupoId) {
+    console.log(`Grupo ${grupoId} salvo!`);
+    alert(`Grupo ${grupoId} atualizado com sucesso!`);
+}
