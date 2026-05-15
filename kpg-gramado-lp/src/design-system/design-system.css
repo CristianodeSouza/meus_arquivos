@@ -1,0 +1,470 @@
+/**
+ * KPG Imóveis - Design System - CSS Variables
+ *
+ * Arquivo de variáveis CSS para uso em componentes
+ * Extraído de: https://www.kpgimoveis.com.br/
+ * Data: 12/05/2026
+ *
+ * Instruções: Preencha as variáveis com os valores extraídos do site
+ */
+
+:root {
+  /* ========================================
+     CORES PRIMÁRIAS
+     ======================================== */
+
+  --color-primary: var(--placeholder);
+  --color-primary-light: var(--placeholder);
+  --color-primary-dark: var(--placeholder);
+  --color-primary-contrast: #ffffff;
+
+  /* ========================================
+     CORES SECUNDÁRIAS
+     ======================================== */
+
+  --color-secondary: var(--placeholder);
+  --color-secondary-light: var(--placeholder);
+  --color-secondary-dark: var(--placeholder);
+  --color-secondary-contrast: #ffffff;
+
+  /* ========================================
+     CORES DE ESTADO
+     ======================================== */
+
+  --color-success: var(--placeholder); /* Verde */
+  --color-warning: var(--placeholder); /* Amarelo/Laranja */
+  --color-error: var(--placeholder); /* Vermelho */
+  --color-info: var(--placeholder); /* Azul */
+
+  /* ========================================
+     CORES NEUTRAS
+     ======================================== */
+
+  --color-background: var(--placeholder);
+  --color-surface: var(--placeholder);
+  --color-border: var(--placeholder);
+
+  /* Texto */
+  --color-text-primary: var(--placeholder);
+  --color-text-secondary: var(--placeholder);
+  --color-text-tertiary: var(--placeholder);
+  --color-text-disabled: var(--placeholder);
+
+  /* Cinzas */
+  --color-gray-50: var(--placeholder);
+  --color-gray-100: var(--placeholder);
+  --color-gray-200: var(--placeholder);
+  --color-gray-300: var(--placeholder);
+  --color-gray-400: var(--placeholder);
+  --color-gray-500: var(--placeholder);
+  --color-gray-600: var(--placeholder);
+  --color-gray-700: var(--placeholder);
+  --color-gray-800: var(--placeholder);
+  --color-gray-900: var(--placeholder);
+
+  /* ========================================
+     CORES DE LINK
+     ======================================== */
+
+  --color-link-default: var(--placeholder);
+  --color-link-visited: var(--placeholder);
+  --color-link-hover: var(--placeholder);
+  --color-link-active: var(--placeholder);
+
+  /* ========================================
+     CORES PARA IMÓVEIS
+     ======================================== */
+
+  --color-property-available: var(--placeholder);
+  --color-property-unavailable: var(--placeholder);
+  --color-property-featured: var(--placeholder);
+
+  /* ========================================
+     TIPOGRAFIA - FONT FAMILIES
+     ======================================== */
+
+  --font-primary: var(--placeholder);
+  --font-secondary: var(--placeholder);
+  --font-mono: var(--placeholder);
+
+  /* ========================================
+     TIPOGRAFIA - FONT SIZES
+     ======================================== */
+
+  --font-size-h1: var(--placeholder);
+  --font-size-h2: var(--placeholder);
+  --font-size-h3: var(--placeholder);
+  --font-size-h4: var(--placeholder);
+  --font-size-h5: var(--placeholder);
+  --font-size-h6: var(--placeholder);
+  --font-size-body: var(--placeholder);
+  --font-size-body-small: var(--placeholder);
+  --font-size-body-tiny: var(--placeholder);
+  --font-size-button: var(--placeholder);
+  --font-size-label: var(--placeholder);
+  --font-size-caption: var(--placeholder);
+
+  /* ========================================
+     TIPOGRAFIA - FONT WEIGHTS
+     ======================================== */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ========================================
+     TIPOGRAFIA - LINE HEIGHTS
+     ======================================== */
+
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+
+  /* ========================================
+     ESPAÇAMENTO - SCALE (8px base)
+     ======================================== */
+
+  --spacing-xs: var(--placeholder); /* 4px */
+  --spacing-sm: var(--placeholder); /* 8px */
+  --spacing-md: var(--placeholder); /* 16px */
+  --spacing-lg: var(--placeholder); /* 24px */
+  --spacing-xl: var(--placeholder); /* 32px */
+  --spacing-xxl: var(--placeholder); /* 48px */
+  --spacing-xxxl: var(--placeholder); /* 64px */
+
+  /* Aliases */
+  --spacing-gutter: var(--placeholder); /* Entre colunas */
+  --spacing-section: var(--placeholder); /* Entre seções */
+  --spacing-component: var(--placeholder); /* Entre componentes */
+
+  /* ========================================
+     ESPAÇAMENTO - BORDER RADIUS
+     ======================================== */
+
+  --border-radius-xs: var(--placeholder); /* 2-4px */
+  --border-radius-sm: var(--placeholder); /* 4-8px */
+  --border-radius-md: var(--placeholder); /* 8-12px */
+  --border-radius-lg: var(--placeholder); /* 12-16px */
+  --border-radius-xl: var(--placeholder); /* 16-24px */
+  --border-radius-full: 9999px;
+
+  /* ========================================
+     ESPAÇAMENTO - PADDING
+     ======================================== */
+
+  --padding-button-y: var(--placeholder);
+  --padding-button-x: var(--placeholder);
+  --padding-card-y: var(--placeholder);
+  --padding-card-x: var(--placeholder);
+  --padding-section-y: var(--placeholder);
+  --padding-section-x: var(--placeholder);
+  --padding-input-y: var(--placeholder);
+  --padding-input-x: var(--placeholder);
+
+  /* ========================================
+     ESPAÇAMENTO - MARGIN
+     ======================================== */
+
+  --margin-between: var(--placeholder);
+  --margin-section-y: var(--placeholder);
+  --margin-section-x: var(--placeholder);
+
+  /* ========================================
+     ESPAÇAMENTO - GAP (Flex/Grid)
+     ======================================== */
+
+  --gap-xs: var(--placeholder);
+  --gap-sm: var(--placeholder);
+  --gap-md: var(--placeholder);
+  --gap-lg: var(--placeholder);
+  --gap-xl: var(--placeholder);
+
+  /* ========================================
+     LAYOUT - CONTAINER
+     ======================================== */
+
+  --container-max-width: var(--placeholder); /* 1200px, 1280px, etc */
+  --container-padding: var(--placeholder);
+
+  /* Breakpoints */
+  --breakpoint-mobile: var(--placeholder); /* ~640px */
+  --breakpoint-tablet: var(--placeholder); /* ~1024px */
+  --breakpoint-desktop: var(--placeholder); /* 1024px+ */
+
+  /* ========================================
+     ALTURAS
+     ======================================== */
+
+  --height-button-sm: var(--placeholder);
+  --height-button-md: var(--placeholder);
+  --height-button-lg: var(--placeholder);
+  --height-input: var(--placeholder);
+  --height-header: var(--placeholder);
+  --height-footer: var(--placeholder);
+  --height-card-image: var(--placeholder);
+
+  /* ========================================
+     SOMBRAS
+     ======================================== */
+
+  --shadow-sm: var(--placeholder);
+  --shadow-md: var(--placeholder);
+  --shadow-lg: var(--placeholder);
+  --shadow-xl: var(--placeholder);
+  --shadow-hover: var(--placeholder);
+
+  /* ========================================
+     TRANSIÇÕES/ANIMAÇÕES
+     ======================================== */
+
+  --transition-fast: 150ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+
+  --easing-linear: linear;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+  --easing-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   EXEMPLOS DE USO
+   ======================================== */
+
+/* Exemplo 1: Botão Primário */
+.btn-primary {
+  padding: var(--padding-button-y) var(--padding-button-x);
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-medium);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal) var(--easing-cubic);
+  height: var(--height-button-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-light);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  background-color: var(--color-primary-dark);
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background-color: var(--color-gray-400);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Exemplo 2: Card de Imóvel */
+.property-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--padding-card-y) var(--padding-card-x);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal) var(--easing-cubic);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.property-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.property-card-image {
+  width: 100%;
+  height: var(--height-card-image);
+  object-fit: cover;
+  border-radius: var(--border-radius-md);
+}
+
+.property-card-title {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+.property-card-description {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.property-status {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+}
+
+.property-status.available {
+  background-color: var(--color-property-available);
+  color: var(--color-primary-contrast);
+}
+
+.property-status.unavailable {
+  background-color: var(--color-property-unavailable);
+  color: var(--color-primary-contrast);
+}
+
+.property-status.featured {
+  background-color: var(--color-property-featured);
+  color: var(--color-primary-contrast);
+}
+
+/* Exemplo 3: Container Principal */
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Exemplo 4: Seção */
+.section {
+  padding: var(--spacing-section) 0;
+  margin: var(--margin-section-y) 0;
+}
+
+/* Exemplo 5: Texto Corpo */
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+}
+
+/* Exemplo 6: Títulos */
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+/* Exemplo 7: Links */
+a {
+  color: var(--color-link-default);
+  text-decoration: none;
+  transition: color var(--transition-normal) var(--easing-cubic);
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:visited {
+  color: var(--color-link-visited);
+}
+
+a:active {
+  color: var(--color-link-active);
+}
+
+/* Exemplo 8: Form Input */
+input,
+textarea,
+select {
+  padding: var(--padding-input-y) var(--padding-input-x);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  transition: all var(--transition-normal) var(--easing-cubic);
+  height: var(--height-input);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--color-gray-100);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+input.error,
+textarea.error,
+select.error {
+  border-color: var(--color-error);
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+
+@media (max-width: 640px) {
+  :root {
+    --spacing-section: var(--spacing-lg);
+    --padding-section-x: var(--spacing-md);
+  }
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  :root {
+    --spacing-section: var(--spacing-xl);
+    --padding-section-x: var(--spacing-lg);
+  }
+}
+
+/* ========================================
+   RESPONSIVE - DESKTOP
+   ======================================== */
+
+@media (min-width: 1024px) {
+  :root {
+    --spacing-section: var(--spacing-xxl);
+    --padding-section-x: var(--spacing-xl);
+  }
+}
