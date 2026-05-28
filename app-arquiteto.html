@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rastreador de Projeto Arquitetônico</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-light: #f3f4f6;
+      --bg-white: #ffffff;
+      --text-dark: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 60px;
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    /* Main Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 99;
+      box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      min-height: 60px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--primary);
+    }
+
+    .card.success {
+      border-left-color: var(--success);
+    }
+
+    .card.warning {
+      border-left-color: var(--warning);
+    }
+
+    .card.danger {
+      border-left-color: var(--danger);
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-bottom: 16px;
+    }
+
+    .progress-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-light);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      transition: width 0.3s ease;
+    }
+
+    /* Phase Card */
+    .phase-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .phase-card h4 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .phase-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .phase-status.completed {
+      background: #d1fae5;
+      color: var(--success);
+    }
+
+    .phase-status.in-progress {
+      background: #fef3c7;
+      color: var(--warning);
+    }
+
+    .phase-status.pending {
+      background: #f3f4f6;
+      color: var(--text-muted);
+    }
+
+    /* Activity Status Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .badge.todo {
+      background: #f3f4f6;
+      color: var(--text-muted);
+    }
+
+    .badge.in-progress {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.done {
+      background: #d1fae5;
+      color: var(--success);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:active {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .fab {
+      position: fixed;
+      bottom: 70px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fab:active {
+      opacity: 0.9;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px 16px 0 0;
+      padding: 24px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    /* Timeline */
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      flex: 1;
+    }
+
+    .timeline-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Contact Card */
+    .contact-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .contact-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .contact-role {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .contact-actions a {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+
+    .contact-actions a:active {
+      opacity: 0.9;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background: white;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Document Upload */
+    .document-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .document-item {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .document-icon {
+      font-size: 32px;
+      width: 48px;
+      text-align: center;
+    }
+
+    .document-info {
+      flex: 1;
+    }
+
+    .document-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .document-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Overdue indicator */
+    .overdue {
+      color: var(--danger);
+    }
+
+    .upcoming {
+      color: var(--warning);
+    }
+
+    /* Metric */
+    .metric {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Input file styling */
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .file-input-label {
+      padding: 12px 16px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      display: block;
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      body {
+        padding-bottom: 0;
+      }
+
+      .content {
+        padding: 32px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .bottom-nav {
+        display: none;
+      }
+
+      .fab {
+        bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📐 Projeto Arquitetônico</h1>
+    <p id="project-name">Carregando...</p>
+  </div>
+
+  <div class="content">
+    <!-- Dashboard Page -->
+    <div class="page active" id="dashboard">
+      <div class="progress-container">
+        <div class="progress-label">
+          <span>Progresso Geral</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <h2 style="font-size: 16px; margin: 24px 0 16px; font-weight: 600;">Fases do Projeto</h2>
+      <div id="phases-container"></div>
+
+      <h2 style="font-size: 16px; margin: 24px 0 16px; font-weight: 600;">Próximas Atividades</h2>
+      <div id="upcoming-activities"></div>
+
+      <h2 style="font-size: 16px; margin: 24px 0 16px; font-weight: 600;">Eventos Recentes</h2>
+      <div id="recent-events"></div>
+    </div>
+
+    <!-- Activities Page -->
+    <div class="page" id="activities">
+      <div class="tabs" id="activity-filters"></div>
+      <div id="activities-container"></div>
+    </div>
+
+    <!-- Documents Page -->
+    <div class="page" id="documents">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <div class="file-input-wrapper">
+          <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png">
+          <label class="file-input-label" for="file-input">+ Adicionar Documento</label>
+        </div>
+      </div>
+
+      <div class="tabs" id="document-filters"></div>
+      <div class="document-list" id="documents-container"></div>
+    </div>
+
+    <!-- Timeline Page -->
+    <div class="page" id="timeline">
+      <div id="timeline-container"></div>
+    </div>
+
+    <!-- Contacts Page -->
+    <div class="page" id="contacts">
+      <div id="contacts-container"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-item active" data-page="dashboard">
+      <div class="nav-icon">📊</div>
+      <div>Dashboard</div>
+    </button>
+    <button class="nav-item" data-page="activities">
+      <div class="nav-icon">✓</div>
+      <div>Atividades</div>
+    </button>
+    <button class="nav-item" data-page="documents">
+      <div class="nav-icon">📄</div>
+      <div>Documentos</div>
+    </button>
+    <button class="nav-item" data-page="timeline">
+      <div class="nav-icon">📅</div>
+      <div>Timeline</div>
+    </button>
+    <button class="nav-item" data-page="contacts">
+      <div class="nav-icon">👥</div>
+      <div>Contatos</div>
+    </button>
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" id="fab-new-activity">+</button>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <script>
+    class StorageManager {
+      constructor(key = 'projetoArquitetonico') {
+        this.key = key;
+      }
+
+      getData() {
+        const data = localStorage.getItem(this.key);
+        return data ? JSON.parse(data) : null;
+      }
+
+      setData(data) {
+        localStorage.setItem(this.key, JSON.stringify(data));
+      }
+
+      saveActivity(activity) {
+        const data = this.getData();
+        const index = data.atividades.findIndex(a => a.id === activity.id);
+        if (index >= 0) {
+          data.atividades[index] = activity;
+        } else {
+          activity.id = Math.max(...data.atividades.map(a => a.id), 0) + 1;
+          data.atividades.push(activity);
+        }
+        this.setData(data);
+        this.addEvent({
+          tipo: activity.status === 'concluido' ? 'tarefa_concluida' : 'tarefa_atualizada',
+          titulo: `${activity.status === 'concluido' ? 'Concluída' : 'Atualizada'}: ${activity.titulo}`,
+          arquiteto: activity.arquiteto,
+          data: new Date().toISOString()
+        });
+        return activity;
+      }
+
+      deleteActivity(id) {
+        const data = this.getData();
+        data.atividades = data.atividades.filter(a => a.id !== id);
+        this.setData(data);
+      }
+
+      saveDocument(document) {
+        const data = this.getData();
+        document.id = Math.max(...data.documentos.map(d => d.id), 0) + 1;
+        data.documentos.push(document);
+        this.setData(data);
+        this.addEvent({
+          tipo: 'arquivo_enviado',
+          titulo: `Documento enviado: ${document.nome}`,
+          arquiteto: 'Sistema',
+          data: new Date().toISOString(),
+          documentoId: document.id
+        });
+        return document;
+      }
+
+      addEvent(event) {
+        const data = this.getData();
+        event.id = Math.max(...data.eventos.map(e => e.id), 0) + 1;
+        data.eventos.unshift(event);
+        this.setData(data);
+      }
+
+      updateProgress() {
+        const data = this.getData();
+        const total = data.atividades.length;
+        const completed = data.atividades.filter(a => a.status === 'concluido').length;
+        data.projeto.progresso = total > 0 ? Math.round((completed / total) * 100) : 0;
+        this.setData(data);
+        return data.projeto.progresso;
+      }
+    }
+
+    class DateFormatter {
+      static format(dateStr) {
+        const date = new Date(dateStr);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        if (date.toDateString() === today.toDateString()) {
+          return 'Hoje';
+        } else if (date.toDateString() === tomorrow.toDateString()) {
+          return 'Amanhã';
+        } else {
+          return date.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit'
+          });
+        }
+      }
+
+      static formatFull(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+
+      static daysUntil(dateStr) {
+        const date = new Date(dateStr);
+        const today = new Date();
+        const diff = date - today;
+        const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+        return days;
+      }
+
+      static isOverdue(dateStr) {
+        return this.daysUntil(dateStr) < 0;
+      }
+    }
+
+    class ProjectTracker {
+      constructor() {
+        this.storage = new StorageManager();
+        this.data = null;
+        this.currentActivityFilter = null;
+        this.currentDocumentFilter = null;
+        this.init();
+      }
+
+      init() {
+        this.loadData();
+        this.setupEventListeners();
+        this.render();
+      }
+
+      loadData() {
+        this.data = this.storage.getData();
+        if (!this.data) {
+          this.data = this.getDefaultData();
+          this.storage.setData(this.data);
+        }
+      }
+
+      getDefaultData() {
+        return {
+          projeto: {
+            nome: 'Reforma Casa - Rua das Flores, 123',
+            dataInicio: '2025-01-15',
+            dataTermino: '2025-12-31',
+            progresso: 35
+          },
+          arquitetos: [
+            { id: 1, nome: 'João Silva', especialidade: 'Projeto', whatsapp: '11987654321', email: 'joao@email.com' },
+            { id: 2, nome: 'Maria Costa', especialidade: 'Execução', whatsapp: '11912345678', email: 'maria@email.com' }
+          ],
+          fases: [
+            { id: 1, nome: 'Projeto Básico', progresso: 100, status: 'concluido' },
+            { id: 2, nome: 'Projeto Executivo', progresso: 60, status: 'em_progresso' },
+            { id: 3, nome: 'Execução', progresso: 0, status: 'nao_iniciado' }
+          ],
+          atividades: [
+            { id: 1, titulo: 'Enviar plantas baixas', descricao: 'Plantas do pavimento térreo', faseId: 1, arquiteto: 'João', prazo: '2025-02-20', status: 'concluido', dataConclusa: '2025-02-18' },
+            { id: 2, titulo: 'Aprovação plantas', descricao: 'Cliente revisar e aprovar plantas', faseId: 1, arquiteto: 'João', prazo: '2025-02-28', status: 'concluido', dataConclusa: '2025-03-02' },
+            { id: 3, titulo: 'Revisão estrutural', descricao: 'Análise estrutural da reforma', faseId: 2, arquiteto: 'Maria', prazo: '2025-03-15', status: 'em_progresso', dataConclusa: null },
+            { id: 4, titulo: 'Projeto elétrico', descricao: 'Design da instalação elétrica', faseId: 2, arquiteto: 'João', prazo: '2025-03-25', status: 'nao_feito', dataConclusa: null },
+            { id: 5, titulo: 'Projeto hidráulico', descricao: 'Design da instalação hidráulica', faseId: 2, arquiteto: 'João', prazo: '2025-03-25', status: 'nao_feito', dataConclusa: null },
+            { id: 6, titulo: 'Orçamento geral', descricao: 'Elaborar orçamento completo', faseId: 2, arquiteto: 'Maria', prazo: '2025-04-05', status: 'nao_feito', dataConclusa: null }
+          ],
+          documentos: [
+            { id: 1, nome: 'Planta Baixa - Pavimento 1.pdf', tipo: 'Planta', dataUpload: '2025-02-18', tamanho: 2048576, url: null },
+            { id: 2, nome: 'Fachada Principal.pdf', tipo: 'Planta', dataUpload: '2025-02-20', tamanho: 1024576, url: null },
+            { id: 3, nome: 'Corte Longitudinal.pdf', tipo: 'Planta', dataUpload: '2025-02-22', tamanho: 1536000, url: null }
+          ],
+          eventos: [
+            { id: 5, tipo: 'tarefa_concluida', titulo: 'Aprovação plantas', arquiteto: 'João', data: '2025-03-02T15:30:00Z', documentoId: 1 },
+            { id: 4, tipo: 'arquivo_enviado', titulo: 'Corte Longitudinal enviado', arquiteto: 'Maria', data: '2025-02-22T11:00:00Z', documentoId: 3 },
+            { id: 3, tipo: 'arquivo_enviado', titulo: 'Fachada Principal enviada', arquiteto: 'João', data: '2025-02-20T09:30:00Z', documentoId: 2 },
+            { id: 2, tipo: 'tarefa_concluida', titulo: 'Plantas básicas entregues', arquiteto: 'João', data: '2025-02-18T14:30:00Z', documentoId: 1 },
+            { id: 1, tipo: 'projeto_iniciado', titulo: 'Projeto iniciado', arquiteto: 'João', data: '2025-01-15T08:00:00Z', documentoId: null }
+          ]
+        };
+      }
+
+      setupEventListeners() {
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(btn => {
+          btn.addEventListener('click', (e) => this.switchPage(btn.dataset.page));
+        });
+
+        // FAB
+        document.getElementById('fab-new-activity').addEventListener('click', () => this.showActivityModal());
+
+        // File upload
+        document.getElementById('file-input').addEventListener('change', (e) => this.handleFileUpload(e));
+
+        // Modal overlay click
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+          if (e.target === e.currentTarget) {
+            this.closeModal();
+          }
+        });
+      }
+
+      switchPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+        document.getElementById(page).classList.add('active');
+        event.target.closest('.nav-item').classList.add('active');
+
+        if (page === 'activities') this.renderActivities();
+        if (page === 'documents') this.renderDocuments();
+        if (page === 'timeline') this.renderTimeline();
+        if (page === 'contacts') this.renderContacts();
+      }
+
+      render() {
+        this.renderHeader();
+        this.renderDashboard();
+        this.renderActivities();
+        this.renderDocuments();
+        this.renderTimeline();
+        this.renderContacts();
+      }
+
+      renderHeader() {
+        document.getElementById('project-name').textContent = this.data.projeto.nome;
+      }
+
+      renderDashboard() {
+        const progress = this.data.projeto.progresso;
+        document.getElementById('progress-fill').style.width = progress + '%';
+        document.getElementById('progress-percent').textContent = progress + '%';
+
+        // Fases
+        const phasesHtml = this.data.fases.map(fase => `
+          <div class="phase-card">
+            <h4>${fase.nome}</h4>
+            <div class="progress-bar" style="margin: 8px 0;">
+              <div class="progress-fill" style="width: ${fase.progresso}%; background: ${this.getPhaseColor(fase.status)}"></div>
+            </div>
+            <span class="phase-status ${fase.status}">${this.getPhaseStatusLabel(fase.status)}</span>
+          </div>
+        `).join('');
+        document.getElementById('phases-container').innerHTML = phasesHtml;
+
+        // Próximas atividades
+        const upcomingActivities = this.data.atividades
+          .filter(a => a.status !== 'concluido')
+          .sort((a, b) => new Date(a.prazo) - new Date(b.prazo))
+          .slice(0, 3);
+
+        const upcomingHtml = upcomingActivities.length > 0 ? upcomingActivities.map(a => `
+          <div class="card ${this.getActivityCardClass(a)}">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h3>${a.titulo}</h3>
+                <p>${a.descricao || ''}</p>
+                <span class="badge ${a.status}">${this.getActivityStatusLabel(a.status)}</span>
+              </div>
+              <span style="font-size: 12px; white-space: nowrap; margin-left: 8px;" class="${DateFormatter.isOverdue(a.prazo) ? 'overdue' : 'upcoming'}">
+                ${DateFormatter.format(a.prazo)}
+              </span>
+            </div>
+          </div>
+        `).join('') : '<div class="empty-state"><p>Nenhuma atividade pendente 🎉</p></div>';
+        document.getElementById('upcoming-activities').innerHTML = upcomingHtml;
+
+        // Eventos recentes
+        const recentEvents = this.data.eventos.slice(0, 3);
+        const eventsHtml = recentEvents.map(e => `
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h4>${e.titulo}</h4>
+              <p>${e.arquiteto} • ${DateFormatter.format(e.data)}</p>
+            </div>
+          </div>
+        `).join('');
+        document.getElementById('recent-events').innerHTML = eventsHtml;
+      }
+
+      renderActivities() {
+        // Filtros
+        const statuses = ['nao_feito', 'em_progresso', 'concluido'];
+        const filtersHtml = `
+          <button class="tab-btn ${!this.currentActivityFilter ? 'active' : ''}" onclick="app.filterActivities(null)">Todas</button>
+          ${statuses.map(s => `
+            <button class="tab-btn ${this.currentActivityFilter === s ? 'active' : ''}" onclick="app.filterActivities('${s}')">
+              ${this.getActivityStatusLabel(s)}
+            </button>
+          `).join('')}
+        `;
+        document.getElementById('activity-filters').innerHTML = filtersHtml;
+
+        // Lista
+        let filtered = this.data.atividades;
+        if (this.currentActivityFilter) {
+          filtered = filtered.filter(a => a.status === this.currentActivityFilter);
+        }
+
+        const activitiesHtml = filtered.length > 0 ? filtered.map(a => `
+          <div class="card ${this.getActivityCardClass(a)}" onclick="app.showActivityDetail(${a.id})">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div style="flex: 1;">
+                <h3>${a.titulo}</h3>
+                <p>${a.descricao || 'Sem descrição'}</p>
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+                  ${a.arquiteto} • ${DateFormatter.format(a.prazo)}
+                </div>
+                <span class="badge ${a.status}">${this.getActivityStatusLabel(a.status)}</span>
+              </div>
+              <button class="btn btn-danger" onclick="event.stopPropagation(); app.deleteActivity(${a.id})">🗑️</button>
+            </div>
+          </div>
+        `).join('') : '<div class="empty-state"><div class="empty-state-icon">✓</div><p>Nenhuma atividade nesta categoria</p></div>';
+
+        document.getElementById('activities-container').innerHTML = activitiesHtml;
+      }
+
+      renderDocuments() {
+        // Filtros
+        const tipos = [...new Set(this.data.documentos.map(d => d.tipo))];
+        const filtersHtml = `
+          <button class="tab-btn ${!this.currentDocumentFilter ? 'active' : ''}" onclick="app.filterDocuments(null)">Todos</button>
+          ${tipos.map(t => `
+            <button class="tab-btn ${this.currentDocumentFilter === t ? 'active' : ''}" onclick="app.filterDocuments('${t}')">
+              ${t}
+            </button>
+          `).join('')}
+        `;
+        document.getElementById('document-filters').innerHTML = filtersHtml;
+
+        // Lista
+        let filtered = this.data.documentos;
+        if (this.currentDocumentFilter) {
+          filtered = filtered.filter(d => d.tipo === this.currentDocumentFilter);
+        }
+
+        const docsHtml = filtered.length > 0 ? filtered.map(d => `
+          <div class="document-item">
+            <div class="document-icon">${this.getDocumentIcon(d.nome)}</div>
+            <div class="document-info">
+              <div class="document-name">${d.nome}</div>
+              <div class="document-meta">${DateFormatter.format(d.dataUpload)} • ${(d.tamanho / 1024).toFixed(0)} KB</div>
+            </div>
+          </div>
+        `).join('') : '<div class="empty-state"><div class="empty-state-icon">📄</div><p>Nenhum documento</p></div>';
+
+        document.getElementById('documents-container').innerHTML = docsHtml;
+      }
+
+      renderTimeline() {
+        const timelineHtml = this.data.eventos.map(e => `
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h4>${e.titulo}</h4>
+              <p>${e.arquiteto} • ${DateFormatter.formatFull(e.data)}</p>
+            </div>
+          </div>
+        `).join('');
+        document.getElementById('timeline-container').innerHTML = timelineHtml;
+      }
+
+      renderContacts() {
+        const contactsHtml = this.data.arquitetos.map(a => {
+          const tasks = this.data.atividades.filter(t => t.arquiteto === a.nome);
+          const completed = tasks.filter(t => t.status === 'concluido').length;
+          const taxa = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+
+          return `
+            <div class="contact-card">
+              <div class="contact-name">${a.nome}</div>
+              <div class="contact-role">${a.especialidade}</div>
+              <div class="metric" style="background: var(--primary); color: white; text-align: center;">
+                <div class="metric-value">${taxa}%</div>
+                <div class="metric-label">Taxa de conclusão</div>
+              </div>
+              <div class="contact-actions">
+                <a href="https://wa.me/${a.whatsapp}?text=Olá%20${a.nome}%20tudo%20bem?" target="_blank">💬 WhatsApp</a>
+                <a href="mailto:${a.email}">✉️ Email</a>
+              </div>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('contacts-container').innerHTML = contactsHtml;
+      }
+
+      filterActivities(status) {
+        this.currentActivityFilter = status;
+        this.renderActivities();
+      }
+
+      filterDocuments(tipo) {
+        this.currentDocumentFilter = tipo;
+        this.renderDocuments();
+      }
+
+      showActivityModal(activityId = null) {
+        let activity = null;
+        if (activityId) {
+          activity = this.data.atividades.find(a => a.id === activityId);
+        } else {
+          activity = {
+            titulo: '',
+            descricao: '',
+            faseId: 1,
+            arquiteto: this.data.arquitetos[0].nome,
+            prazo: new Date().toISOString().split('T')[0],
+            status: 'nao_feito'
+          };
+        }
+
+        const faseOptions = this.data.fases.map(f =>
+          `<option value="${f.id}" ${activity.faseId === f.id ? 'selected' : ''}>${f.nome}</option>`
+        ).join('');
+
+        const arquitetoOptions = this.data.arquitetos.map(a =>
+          `<option ${activity.arquiteto === a.nome ? 'selected' : ''}>${a.nome}</option>`
+        ).join('');
+
+        const modalHtml = `
+          <h2>${activityId ? 'Editar Atividade' : 'Nova Atividade'}</h2>
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" id="modal-titulo" value="${activity.titulo || ''}">
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea id="modal-descricao">${activity.descricao || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Fase</label>
+            <select id="modal-fase">${faseOptions}</select>
+          </div>
+          <div class="form-group">
+            <label>Responsável</label>
+            <select id="modal-arquiteto">${arquitetoOptions}</select>
+          </div>
+          <div class="form-group">
+            <label>Data de Prazo</label>
+            <input type="date" id="modal-prazo" value="${activity.prazo || ''}">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="modal-status">
+              <option value="nao_feito" ${activity.status === 'nao_feito' ? 'selected' : ''}>A Fazer</option>
+              <option value="em_progresso" ${activity.status === 'em_progresso' ? 'selected' : ''}>Em Progresso</option>
+              <option value="concluido" ${activity.status === 'concluido' ? 'selected' : ''}>Concluído</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="app.closeModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="app.saveActivity(${activityId || 'null'})">Salvar</button>
+          </div>
+        `;
+
+        document.getElementById('modal-content').innerHTML = modalHtml;
+        document.getElementById('modal-overlay').classList.add('active');
+      }
+
+      showActivityDetail(id) {
+        this.showActivityModal(id);
+      }
+
+      saveActivity(id) {
+        const activity = {
+          id: id,
+          titulo: document.getElementById('modal-titulo').value,
+          descricao: document.getElementById('modal-descricao').value,
+          faseId: parseInt(document.getElementById('modal-fase').value),
+          arquiteto: document.getElementById('modal-arquiteto').value,
+          prazo: document.getElementById('modal-prazo').value,
+          status: document.getElementById('modal-status').value,
+          dataConclusa: document.getElementById('modal-status').value === 'concluido' ? new Date().toISOString() : null
+        };
+
+        this.storage.saveActivity(activity);
+        this.storage.updateProgress();
+        this.loadData();
+        this.render();
+        this.closeModal();
+      }
+
+      deleteActivity(id) {
+        if (confirm('Tem certeza que deseja deletar esta atividade?')) {
+          this.storage.deleteActivity(id);
+          this.storage.updateProgress();
+          this.loadData();
+          this.renderActivities();
+        }
+      }
+
+      handleFileUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const document = {
+            nome: file.name,
+            tipo: this.getDocumentType(file.name),
+            dataUpload: new Date().toISOString().split('T')[0],
+            tamanho: file.size,
+            url: null
+          };
+
+          this.storage.saveDocument(document);
+          this.loadData();
+          this.renderDocuments();
+          document.getElementById('file-input').value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+
+      getDocumentType(filename) {
+        if (filename.toLowerCase().includes('planta')) return 'Planta';
+        if (filename.toLowerCase().includes('orçamento') || filename.toLowerCase().includes('orcamento')) return 'Orçamento';
+        if (filename.toLowerCase().includes('contrato')) return 'Contrato';
+        if (filename.toLowerCase().includes('foto') || filename.toLowerCase().includes('image')) return 'Foto';
+        return 'Documento';
+      }
+
+      getDocumentIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        if (ext === 'pdf') return '📄';
+        if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return '🖼️';
+        return '📎';
+      }
+
+      getActivityCardClass(activity) {
+        if (activity.status === 'concluido') return 'success';
+        if (DateFormatter.isOverdue(activity.prazo) && activity.status !== 'concluido') return 'danger';
+        if (activity.status === 'em_progresso') return 'warning';
+        return '';
+      }
+
+      getActivityStatusLabel(status) {
+        const labels = {
+          'nao_feito': 'A Fazer',
+          'em_progresso': 'Em Progresso',
+          'concluido': 'Concluído'
+        };
+        return labels[status] || status;
+      }
+
+      getPhaseStatusLabel(status) {
+        const labels = {
+          'concluido': 'Concluído',
+          'em_progresso': 'Em Progresso',
+          'nao_iniciado': 'Não Iniciado'
+        };
+        return labels[status] || status;
+      }
+
+      getPhaseColor(status) {
+        const colors = {
+          'concluido': 'var(--success)',
+          'em_progresso': 'var(--warning)',
+          'nao_iniciado': 'var(--text-muted)'
+        };
+        return colors[status] || 'var(--primary)';
+      }
+
+      closeModal() {
+        document.getElementById('modal-overlay').classList.remove('active');
+      }
+    }
+
+    const app = new ProjectTracker();
+  </script>
+</body>
+</html>
